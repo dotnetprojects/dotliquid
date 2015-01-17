@@ -333,11 +333,13 @@ namespace DotLiquid
 							// Some special cases. If the part wasn't in square brackets and
 							// no key with the same name was found we interpret following calls
 							// as commands and call them on the current object
-						else if (!partResolved && (@object is IEnumerable) && ((part as string) == "size" || (part as string) == "first" || (part as string) == "last"))
+                        else if (!partResolved && (@object is IEnumerable) && ((part as string) == "size" || (part as string) == "sizeminusone" || (part as string) == "first" || (part as string) == "last"))
 						{
 							var castCollection = ((IEnumerable) @object).Cast<object>();
 							if ((part as string) == "size")
 								@object = castCollection.Count();
+                            else if ((part as string) == "sizeminusone")
+                                @object = castCollection.Count() - 1;
 							else if ((part as string) == "first")
 								@object = castCollection.FirstOrDefault();
 							else if ((part as string) == "last")

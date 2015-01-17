@@ -29,7 +29,7 @@ namespace DotLiquid.Tests.Tags
         [Test]
         public void TestFor3()
         {
-            Template t = Template.Parse("{% for a in (0..aa.size) %}{{ aa[a] }}{% endfor %}");
+            Template t = Template.Parse("{% for a in (0..aa.sizeminusone) %}{{ aa[a] }}{% endfor %}");
             Assert.AreEqual("t1t2t3t4",
                 t.Render(Hash.FromAnonymousObject(new { aa = new List<string>() { "t1", "t2", "t3", "t4" } })));
         }

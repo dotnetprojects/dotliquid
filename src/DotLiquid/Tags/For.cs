@@ -99,7 +99,7 @@ namespace DotLiquid.Tags
                 if (!int.TryParse(end.ToString(), out outInt))
                     end = context[end.ToString()];
 
-                collection = Enumerable.Range(Convert.ToInt32(start), Convert.ToInt32(end));                
+		        collection = Enumerable.Range(Convert.ToInt32(start), Convert.ToInt32(end) + 1 - Convert.ToInt32(start));
 		    }
 		    else
 		    {
