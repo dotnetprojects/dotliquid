@@ -91,11 +91,12 @@ namespace DotLiquid.Tags
 		    var forCollectionMatch = ForCollection.Match(_collectionName);
 		    if (forCollectionMatch.Success)
 		    {
+		        int outInt;
 		        object start = forCollectionMatch.Groups[1].Value;
                 object end = forCollectionMatch.Groups[2].Value;
-		        if (start.ToString().Contains("."))
+		        if (!int.TryParse(start.ToString(), out outInt))
 		            start = context[start.ToString()];
-                if (end.ToString().Contains("."))
+                if (!int.TryParse(end.ToString(), out outInt))
                     end = context[end.ToString()];
 
                 collection = Enumerable.Range(Convert.ToInt32(start), Convert.ToInt32(end));                
