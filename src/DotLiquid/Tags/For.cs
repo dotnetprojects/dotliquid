@@ -54,6 +54,7 @@ namespace DotLiquid.Tags
 	public class For : DotLiquid.Block
 	{
 		private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)\s*(reversed)?"), Liquid.QuotedFragment);
+        private static readonly Regex ForCollection = R.B(R.Q(@"\((.*)\.\.(.*)\)"));
 
 		private string _variableName, _collectionName, _name;
 		private bool _reversed;
@@ -84,21 +85,39 @@ namespace DotLiquid.Tags
 		{
 			context.Registers["for"] = context.Registers["for"] ?? new Hash(0);
 
-			object collection = context[_collectionName];
+		    object collection = null;
+		    int from = 0;
+		    
+		    var forCollectionMatch = ForCollection.Match(_collectionName);
+		    if (forCollectionMatch.Success)
+		    {
+		        object start = forCollectionMatch.Groups[1].Value;
+                object end = forCollectionMatch.Groups[2].Value;
+		        if (start.ToString().Contains("."))
+		            start = context[start.ToString()];
+                if (end.ToString().Contains("."))
+                    end = context[end.ToString()];
 
-			if (!(collection is IEnumerable))
-				return;
+                collection = Enumerable.Range(Convert.ToInt32(start), Convert.ToInt32(end));                
+		    }
+		    else
+		    {
+		        collection = context[_collectionName];
 
-			int from = (_attributes.ContainsKey("offset"))
-				? (_attributes["offset"] == "continue")
-					? Convert.ToInt32(context.Registers.Get<Hash>("for")[_name])
-					: Convert.ToInt32(context[_attributes["offset"]])
-				: 0;
+		        if (!(collection is IEnumerable))
+		            return;
 
-			int? limit = _attributes.ContainsKey("limit") ? context[_attributes["limit"]] as int? : null;
-			int? to = (limit != null) ? (int?) (limit.Value + from) : null;
+		        from = (_attributes.ContainsKey("offset"))
+		            ? (_attributes["offset"] == "continue")
+		                ? Convert.ToInt32(context.Registers.Get<Hash>("for")[_name])
+		                : Convert.ToInt32(context[_attributes["offset"]])
+		            : 0;
+		    }
 
-			List<object> segment = SliceCollectionUsingEach((IEnumerable) collection, from, to);
+            int? limit = _attributes.ContainsKey("limit") ? context[_attributes["limit"]] as int? : null;
+            int? to = (limit != null) ? (int?)(limit.Value + from) : null;
+
+		    List<object> segment = SliceCollectionUsingEach((IEnumerable) collection, from, to);
 
 			if (!segment.Any())
 				return;
