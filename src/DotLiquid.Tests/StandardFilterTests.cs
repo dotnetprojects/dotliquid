@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 
@@ -176,6 +177,43 @@ namespace DotLiquid.Tests
 			Assert.AreEqual("b a a a", StandardFilters.ReplaceFirst("a a a a", "a", "b"));
 			Helper.AssertTemplateResult("b a a a", "{{ 'a a a a' | replace_first: 'a', 'b' }}");
 		}
+
+        [Test]
+        public void TestUniq()
+        {
+            
+            Template t = Template.Parse("{% assign q = aa | uniq: 'Key' -%}{{ q.size }}");
+            Assert.AreEqual("3",
+                t.Render(
+                    Hash.FromAnonymousObject(
+                        new
+                        {
+                            aa =
+                                new List<KeyValuePair<string, string>>()
+                                {
+                                    new KeyValuePair<string, string>("t1", "t2"),
+                                    new KeyValuePair<string, string>("t1", "t2"),
+                                    new KeyValuePair<string, string>("t4", "t2"),
+                                    new KeyValuePair<string, string>("t3", "t4")
+                                }
+                        })));
+
+            t = Template.Parse("{% assign q = aa | uniq: 'Value' -%}{{ q.size }}");
+            Assert.AreEqual("2",
+                t.Render(
+                    Hash.FromAnonymousObject(
+                        new
+                        {
+                            aa =
+                                new List<KeyValuePair<string, string>>()
+                                {
+                                    new KeyValuePair<string, string>("t1", "t2"),
+                                    new KeyValuePair<string, string>("t1", "t2"),
+                                    new KeyValuePair<string, string>("t4", "t2"),
+                                    new KeyValuePair<string, string>("t3", "t4")
+                                }
+                        })));
+        }
 
 		[Test]
 		public void TestRemove()
