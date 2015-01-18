@@ -33,5 +33,13 @@ namespace DotLiquid.Tests.Tags
             Assert.AreEqual("t1t2t3t4",
                 t.Render(Hash.FromAnonymousObject(new { aa = new List<string>() { "t1", "t2", "t3", "t4" } })));
         }
+
+        [Test]
+        public void TestFor4()
+        {
+            Template t = Template.Parse("{% assign q=5 %}{% assign w=10 %}{% for a in (q..w) %}{{ a }}{% endfor %}");
+            Assert.AreEqual("5678910",
+                t.Render(Hash.FromAnonymousObject(new { aa = new List<string>() { "t1", "t2", "t3", "t4" } })));
+        }
     }
 }
