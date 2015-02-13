@@ -48,6 +48,33 @@ namespace DotLiquid
 			return input.Substring(start, len);
 		}
 
+        /// <summary>
+        /// Pad Left String
+        /// </summary>
+        /// <param name="len"></param>
+        /// <param name="fill"></param>
+        /// <returns></returns>
+        public static string Padleft(string input, int len, string fill = " ")
+        {
+            if (input == null)
+                return null;
+            return input.PadLeft(len, fill[0]);
+        }
+
+        /// <summary>
+        /// Pad Right String
+        /// </summary>
+        /// <param name="len"></param>
+        /// <param name="fill"></param>
+        /// <returns></returns>
+        public static string Padright(string input, int len, string fill = " ")
+        {
+            if (input == null)
+                return null;
+            return input.PadRight(len, fill[0]);
+        }
+
+
 		/// <summary>
 		/// convert a input string to DOWNCASE
 		/// </summary>

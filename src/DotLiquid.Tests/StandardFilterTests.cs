@@ -215,6 +215,13 @@ namespace DotLiquid.Tests
                         })));
         }
 
+        [Test]
+        public void TestPad()
+        {
+            Template t = Template.Parse("{{ '123' | padleft: 6,'0' }}");
+            Assert.AreEqual("000123", t.Render());           
+        }
+
 		[Test]
 		public void TestRemove()
 		{
