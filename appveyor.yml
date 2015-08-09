@@ -17,7 +17,7 @@ configuration: Debug
 #  - nuget restore
   
 build:
-  project: DotLiquid.csproj
+  project: stc\DotLiquid.sln
 
 after_build:
   - ps: .\nuget\pack.ps1
