@@ -38,15 +38,14 @@ namespace DotLiquid
 		/// <returns></returns>
 		public static string Slice(string input, int start, int len = 1)
 		{
-			if (input == null || start > input.Length)
-				return null;
-		    if (start < 0)
-		        start = input.Length + start;
-		    
-			if (start + len > input.Length)
-				len = input.Length - start;
-			return input.Substring(start, len);
-		}
+            if (input == null || start > input.Length)
+                return null;
+            if (start < 0)
+                start += input.Length;
+            if (start + len > input.Length)
+                len = input.Length - start;
+            return input.Substring(start, len);
+  		}
 
         /// <summary>
         /// Pad Left String
