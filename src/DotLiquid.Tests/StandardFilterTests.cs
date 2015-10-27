@@ -322,5 +322,22 @@ namespace DotLiquid.Tests
 		{
 			Helper.AssertTemplateResult("1", "{{ 3 | modulo:2 }}");
 		}
+
+        [Test]
+        public void TestNoNewline()
+        {
+            Helper.AssertTemplateResult("aa\r\nbb",
+@"aa
+{% if source == 1 -%}
+{%   if source == 2 -%}
+bb
+cc
+{%   else  -%}
+cc
+dd
+{%   endif -%}
+{% endif -%}
+bb", Hash.FromAnonymousObject(new { source = "2" }));
+        }
 	}
 }
