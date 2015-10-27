@@ -219,10 +219,17 @@ namespace DotLiquid.Tests
         public void TestPad()
         {
             Template t = Template.Parse("{{ '123' | padleft: 6,'0' }}");
-            Assert.AreEqual("000123", t.Render());           
+            Assert.AreEqual("000123", t.Render());
         }
 
-		[Test]
+        [Test]
+        public void TestPad2()
+        {
+            Template t = Template.Parse("{% assign counter = 1 -%}{{ counter | padleft: 3, '0' }}");
+            Assert.AreEqual("001", t.Render());
+        }
+
+        [Test]
 		public void TestRemove()
 		{
 			Assert.AreEqual("   ", StandardFilters.Remove("a a a a", "a"));

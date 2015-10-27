@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DotNetProjects.DotLiquid</id>
+    <version>$version$</version>
+    <authors>DotNetProjects</authors>
+    <owners>DotNetProjects</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/dotliquid/dotliquid</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Framework Assembly for DotNetProjects.DotLiquid</description>
+    <copyright>Copyright 2015</copyright>
+  </metadata>
+  <files>
+    <file src="..\src\DotLiquid\bin\Debug\DotLiquid.dll" target="lib\net40" />
+    <file src="..\src\DotLiquid\bin\Debug\DotLiquid.pdb" target="lib\net40" />
+  </files>
+</package>
