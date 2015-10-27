@@ -7,6 +7,7 @@ using System.Net;
 #endif
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using DotLiquid.Util;
 using System.Web;
@@ -360,11 +361,30 @@ namespace DotLiquid
 				if (first == null)
 					yield break;
 				yield return first;
-				var prp = first.GetType().GetProperty(property);
-				knownKeys.Add(prp.GetValue(first));
+
+			    var properties = property.Split('.');
+			    var type = first.GetType();
+			    PropertyInfo prp = null;
+			    object value = first;
+                foreach (var pPart in properties)
+			    {
+                    prp = type.GetProperty(pPart);
+			        value = prp.GetValue(value);
+                    type = prp.PropertyType;                    
+                }                
+				knownKeys.Add(value);
 				foreach (var item in list.Skip(1))
-				{
-					if (knownKeys.Add(prp.GetValue(item)))
+                {
+                    value = item;
+                    type = item.GetType();
+                    foreach (var pPart in properties)
+                    {
+                        prp = type.GetProperty(pPart);
+                        value = prp.GetValue(value);
+                        type = prp.PropertyType;
+                    }
+
+                    if (knownKeys.Add(value))
 						yield return item;
 				}
 			}
