@@ -101,6 +101,25 @@ namespace DotLiquid
 			return string.Format("<Condition {0} {1} {2}>", Left, Operator, Right);
 		}
 
+		public static bool IsDecimalNumericType(object o)
+		{
+			switch (Type.GetTypeCode(o.GetType()))
+			{
+				case TypeCode.Byte:
+				case TypeCode.SByte:
+				case TypeCode.UInt16:
+				case TypeCode.UInt32:
+				case TypeCode.UInt64:
+				case TypeCode.Int16:
+				case TypeCode.Int32:
+				case TypeCode.Int64:
+				case TypeCode.Decimal:
+					return true;
+				default:
+					return false;
+			}
+		}
+
 		private static bool EqualVariables(object left, object right)
 		{
 			if (left is Symbol)
@@ -111,6 +130,17 @@ namespace DotLiquid
 
 			if (left != null && right != null && left.GetType() != right.GetType())
 			{
+				try
+				{
+					if (IsDecimalNumericType(left) && IsDecimalNumericType(right))
+					{
+						return Convert.ToDecimal(left) == Convert.ToDecimal(right);
+					}
+				}
+				catch (Exception)
+				{
+				}
+
 				try
 				{
 					right = Convert.ChangeType(right, left.GetType());
