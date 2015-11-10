@@ -26,7 +26,17 @@ namespace DotLiquid.Util
 			if (methodInfo != null && (!ensureNoParameters || !methodInfo.GetParameters().Any()))
 				return true;
 
-			PropertyInfo propertyInfo = type.GetProperty(member);
+			PropertyInfo propertyInfo = null;
+			var mbs = member.Split('.');
+			foreach (var mb in mbs)
+			{
+				propertyInfo = type.GetProperty(mb.Replace("_", ""));
+				if (propertyInfo == null)
+					return false;
+
+				type = propertyInfo.PropertyType;
+			}
+
 			if (propertyInfo != null && propertyInfo.CanRead)
 				return true;
 
@@ -53,9 +63,21 @@ namespace DotLiquid.Util
 			if (methodInfo != null)
 				return methodInfo.Invoke(value, parameters);
 
-			PropertyInfo propertyInfo = type.GetProperty(member);
-			if (propertyInfo != null)
-				return propertyInfo.GetValue(value, null);
+			PropertyInfo propertyInfo = null;
+			object gValueFrom = value;
+			var mbs = member.Split('.');
+			foreach (var mb in mbs)
+			{
+				propertyInfo = type.GetProperty(mb.Replace("_", ""));
+				if (propertyInfo == null)
+					return null;
+
+				type = propertyInfo.PropertyType;
+				gValueFrom = propertyInfo.GetValue(gValueFrom, null);
+			}
+
+			if (propertyInfo != null && propertyInfo.CanRead)
+				return gValueFrom;
 
 			return null;
 		}

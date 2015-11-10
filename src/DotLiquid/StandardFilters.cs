@@ -367,8 +367,8 @@ namespace DotLiquid
 			    PropertyInfo prp = null;
 			    object value = first;
                 foreach (var pPart in properties)
-			    {
-                    prp = type.GetProperty(pPart);
+                {
+	                prp = type.GetProperty(pPart.Replace("_", ""));
 			        value = prp.GetValue(value);
                     type = prp.PropertyType;                    
                 }                
@@ -379,7 +379,7 @@ namespace DotLiquid
                     type = item.GetType();
                     foreach (var pPart in properties)
                     {
-                        prp = type.GetProperty(pPart);
+                        prp = type.GetProperty(pPart.Replace("_", ""));
                         value = prp.GetValue(value);
                         type = prp.PropertyType;
                     }
